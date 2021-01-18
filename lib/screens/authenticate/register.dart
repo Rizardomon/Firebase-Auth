@@ -3,7 +3,9 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 
 class Register extends StatefulWidget {
-  Register({Key key}) : super(key: key);
+  final Function toggleView;
+
+  Register({Key key, this.toggleView}) : super(key: key);
 
   @override
   _RegisterState createState() => _RegisterState();
@@ -23,6 +25,15 @@ class _RegisterState extends State<Register> {
         backgroundColor: Colors.brown[400],
         elevation: 0,
         title: Text('Register'),
+        actions: [
+          FlatButton.icon(
+            icon: Icon(Icons.person),
+            label: Text('Sign in'),
+            onPressed: () {
+              widget.toggleView();
+            },
+          )
+        ],
       ),
       body: Container(
         padding: EdgeInsets.symmetric(vertical: 20, horizontal: 30),
