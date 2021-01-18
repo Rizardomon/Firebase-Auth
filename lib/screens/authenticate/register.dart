@@ -13,9 +13,11 @@ class Register extends StatefulWidget {
 
 class _RegisterState extends State<Register> {
   final AuthService _auth = AuthService();
+  final _formKey = GlobalKey<FormState>();
 
   String email = '';
   String password = '';
+  String error = '';
 
   @override
   Widget build(BuildContext context) {
@@ -37,48 +39,65 @@ class _RegisterState extends State<Register> {
       ),
       body: Container(
         padding: EdgeInsets.symmetric(vertical: 20, horizontal: 30),
+
         child: Form(
+            key: _formKey,
             child: Column(
-          children: [
-            SizedBox(
-              height: 20,
-            ),
-            TextFormField(
-              onChanged: (value) {
-                setState(() {
-                  return email = value;
-                });
-              },
-            ),
-            SizedBox(
-              height: 20,
-            ),
-            TextFormField(
-              onChanged: (value) {
-                setState(() {
-                  return password = value;
-                });
-              },
-              obscureText: true,
-            ),
-            SizedBox(
-              height: 20,
-            ),
-            RaisedButton(
-              onPressed: () async {
-                WidgetsFlutterBinding.ensureInitialized();
-                await Firebase.initializeApp();
-                print(email);
-                print(password);
-              },
-              color: Colors.black,
-              child: Text(
-                'Register',
-                style: TextStyle(color: Colors.white),
-              ),
-            )
-          ],
-        )),
+              children: [
+                SizedBox(
+                  height: 20,
+                ),
+                TextFormField(
+                  validator: (value) => value.isEmpty ? 'Enter an email' : null,
+                  onChanged: (value) {
+                    setState(() {
+                      return email = value;
+                    });
+                  },
+                ),
+                SizedBox(
+                  height: 20,
+                ),
+                TextFormField(
+                  validator: (value) => value.length < 6
+                      ? 'Enter a password 6+ chars long'
+                      : null,
+                  onChanged: (value) {
+                    setState(() {
+                      return password = value;
+                    });
+                  },
+                  obscureText: true,
+                ),
+                SizedBox(
+                  height: 20,
+                ),
+                RaisedButton(
+                  onPressed: () async {
+                    WidgetsFlutterBinding.ensureInitialized();
+                    await Firebase.initializeApp();
+                    if (_formKey.currentState.validate()) {
+                      dynamic result = await _auth.registerWithEmailAndPassword(
+                          email, password);
+                      if (result == null) {
+                        setState(() {
+                          return error = 'Please suply a valid email';
+                        });
+                      }
+                    } else {}
+                  },
+                  color: Colors.black,
+                  child: Text(
+                    'Register',
+                    style: TextStyle(color: Colors.white),
+                  ),
+                ),
+                SizedBox(
+                  height: 12,
+                  child: Text(error, style: TextStyle(color: Colors.red)),
+                ),
+              ],
+            )),
         // child: RaisedButton(
         //   onPressed: () async {
         //     WidgetsFlutterBinding.ensureInitialized();
