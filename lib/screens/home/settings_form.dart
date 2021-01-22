@@ -54,9 +54,22 @@ class _SettingsFormState extends State<SettingsForm> {
             onChanged: (val) => setState(() => _currentSugars = val),
           ),
           // Slider
+          Slider(
+            min: 100,
+            max: 900,
+            divisions: 8,
+            onChanged: (val) => setState(() => _currentStrength = val.round()),
+            value: (_currentStrength ?? 100).toDouble(),
+            activeColor: Colors.brown[_currentStrength ?? 100],
+            inactiveColor: Colors.brown[_currentStrength ?? 100],
+          ),
           RaisedButton(
             color: Colors.black,
-            onPressed: () async {},
+            onPressed: () async {
+              print(_currentName);
+              print(_currentSugars);
+              print(_currentStrength);
+            },
             child: Text(
               'Update',
               style: TextStyle(color: Colors.white),
