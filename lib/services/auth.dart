@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_authentication/models/user.dart';
+import 'package:firebase_authentication/services/database.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 
@@ -35,6 +36,7 @@ class AuthService {
       UserCredential result = await _auth.signInWithEmailAndPassword(
           email: email, password: password);
       User user = result.user;
+
       return _userFromFirebaseUser(user);
     } catch (e) {
       print(e.toString());
@@ -48,6 +50,10 @@ class AuthService {
       UserCredential result = await _auth.createUserWithEmailAndPassword(
           email: email, password: password);
       User user = result.user;
+
+      // Create a new document for the user with the uid
+      await DatabaseService(uid: user.uid)
+          .updateUserData('0', 'New crew member', 100);
       return _userFromFirebaseUser(user);
     } catch (e) {
       print(e.toString());
