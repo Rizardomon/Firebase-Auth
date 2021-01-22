@@ -1,5 +1,6 @@
 import 'package:firebase_authentication/models/brew.dart';
 import 'package:firebase_authentication/screens/home/brew_list.dart';
+import 'package:firebase_authentication/screens/home/settings_form.dart';
 import 'package:firebase_authentication/services/auth.dart';
 import 'package:firebase_authentication/services/database.dart';
 import 'package:flutter/material.dart';
@@ -18,7 +19,7 @@ class Home extends StatelessWidget {
                 vertical: 20,
                 horizontal: 60,
               ),
-              child: Text('Bottom'),
+              child: SettingsForm(),
             );
           });
     }
